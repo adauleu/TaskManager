@@ -1,3 +1,3 @@
 export default function CreateTask() {
-  return <div>Create</div>;
+  return <div>Create</div>
 }

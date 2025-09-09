@@ -1,3 +1,3 @@
 export default function EditTask() {
-  return <div>Edit</div>;
+  return <div>Edit</div>
 }

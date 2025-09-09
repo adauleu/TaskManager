@@ -1,13 +1,13 @@
-import './App.css';
-import Footer from './components/Footer';
-import Header from './components/Header';
-import { Route, Routes } from 'react-router-dom';
-import Home from './pages/Home';
-import Tasks from './pages/Tasks';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import CreateTask from './pages/CreateTask';
-import EditTask from './pages/EditTask';
+import './App.css'
+import Footer from './components/Footer'
+import Header from './components/Header'
+import { Route, Routes } from 'react-router-dom'
+import Home from './pages/Home'
+import Tasks from './pages/Tasks'
+import Login from './pages/Login'
+import Register from './pages/Register'
+import CreateTask from './pages/CreateTask'
+import EditTask from './pages/EditTask'
 
 function App() {
   return (
@@ -27,7 +27,7 @@ function App() {
       </main>
       <Footer />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
