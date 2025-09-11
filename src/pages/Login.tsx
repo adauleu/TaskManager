@@ -20,10 +20,10 @@ export default function Login() {
         email,
         password,
       })
-      const token = result.data.accessToken
-      localStorage.setItem(TOKEN_KEY, token)
+      localStorage.setItem(TOKEN_KEY, result.data.accessToken)
       // Set the AUTH token for any request
       axiosInstance.interceptors.request.use(function (config) {
+        const token = localStorage.getItem(TOKEN_KEY)
         config.headers.Authorization = token ? `Bearer ${token}` : ''
         return config
       })

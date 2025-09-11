@@ -16,3 +16,8 @@ export async function getTasks() {
   const tasksResult = await axiosInstance.get<Task[]>('/tasks')
   return tasksResult.data
 }
+
+export async function createTask(payload: Pick<Task, 'title' | 'description' | 'status'>) {
+  const result = await axiosInstance.post<Task>('/tasks', payload)
+  return result.data
+}

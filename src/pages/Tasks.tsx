@@ -1,23 +1,22 @@
 import { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { getTasks } from './api'
+import { axiosInstance, getTasks } from './api'
 import type { Task } from './types'
 
 export default function Tasks() {
   const [tasks, setTasks] = useState<Task[]>([])
-
+  const fetchTasks = async () => {
+    const tasksResult = await getTasks()
+    setTasks(tasksResult)
+  }
   useEffect(() => {
-    const fetchTasks = async () => {
-      const tasksResult = await getTasks()
-      setTasks(tasksResult)
-    }
     fetchTasks()
   }, [])
 
   return (
     <div>
       <h2>Mes Tâches</h2>
-      <NavLink className="inline-block mb-4 text-blue-600 underline" to="/create">
+      <NavLink className="inline-block mb-4 text-blue-600 underline" to="/tasks/create">
         + Nouvelle tâche
       </NavLink>
       {tasks.map((task) => {
@@ -54,11 +53,23 @@ export default function Tasks() {
               )}
               <NavLink
                 className="bg-yellow-500 text-white px-3 py-1 rounded"
-                to={`/tasks/${task.id}/edit`}
+                to={`/tasks/edit/${task.id}`}
               >
                 Modifier
               </NavLink>
-              <button className="bg-red-500 text-white px-3 py-1 rounded">Supprimer</button>
+              <button
+                className="bg-red-500 text-white px-3 py-1 rounded"
+                onClick={async () => {
+                  try {
+                    await axiosInstance.delete(`/tasks/${task.id}`)
+                    fetchTasks()
+                  } catch (e) {
+                    console.error(e)
+                  }
+                }}
+              >
+                Supprimer
+              </button>
             </div>
           </div>
         )

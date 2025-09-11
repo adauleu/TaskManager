@@ -1,13 +1,19 @@
 import './App.css'
 import Footer from './components/Footer'
 import Header from './components/Header'
-import { Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import Home from './pages/Home'
 import Tasks from './pages/Tasks'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import CreateTask from './pages/CreateTask'
 import EditTask from './pages/EditTask'
+import { TOKEN_KEY } from './pages/constants'
+import type { PropsWithChildren } from 'react'
+
+function PrivateRoute({ children }: PropsWithChildren<object>) {
+  return localStorage.getItem(TOKEN_KEY) ? children : <Navigate to="/login" />
+}
 
 function App() {
   return (
@@ -17,9 +23,30 @@ function App() {
         <Routes>
           <Route index path="/" element={<Home />} />
           <Route path="/tasks">
-            <Route index element={<Tasks />} />
-            <Route path="/tasks/create" element={<CreateTask />} />
-            <Route path="/tasks/edit" element={<EditTask />} />
+            <Route
+              index
+              element={
+                <PrivateRoute>
+                  <Tasks />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/tasks/create"
+              element={
+                <PrivateRoute>
+                  <CreateTask />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/tasks/edit/:id"
+              element={
+                <PrivateRoute>
+                  <EditTask />
+                </PrivateRoute>
+              }
+            />
           </Route>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
