@@ -2,10 +2,11 @@ import axios, { type AxiosResponse } from 'axios'
 import { useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
-import { TOKEN_KEY } from './constants'
-import { axiosInstance } from './api'
+import { axiosInstance } from '../services/api'
+import { useAuth } from '../context/AuthContext'
 
 export default function Login() {
+  const { updateToken } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const navigate = useNavigate()
@@ -20,20 +21,12 @@ export default function Login() {
         email,
         password,
       })
-      localStorage.setItem(TOKEN_KEY, result.data.accessToken)
-      // Set the AUTH token for any request
-      axiosInstance.interceptors.request.use(function (config) {
-        const token = localStorage.getItem(TOKEN_KEY)
-        config.headers.Authorization = token ? `Bearer ${token}` : ''
-        return config
-      })
+      updateToken(result.data.accessToken)
       navigate('/tasks')
     } catch (err: unknown) {
       if (axios.isAxiosError(err) && err.response?.status === 400) {
-        // Vous pouvez gérer l'erreur ici, par exemple afficher un message à l'utilisateur
         toast.error(err.response.data)
       } else {
-        // Gérer d'autres types d'erreurs
         console.error(err)
       }
     }

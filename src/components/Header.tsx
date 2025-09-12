@@ -1,13 +1,13 @@
 import { NavLink, useNavigate } from 'react-router-dom'
-import { TOKEN_KEY } from '../pages/constants'
+import { useAuth } from '../context/AuthContext'
 
 export default function Header() {
-  const token = localStorage.getItem(TOKEN_KEY)
+  const { token, updateToken } = useAuth()
   const isConnected = !!token
   const navigate = useNavigate()
 
   function logout() {
-    localStorage.removeItem(TOKEN_KEY)
+    updateToken(null)
     navigate('/login')
   }
 

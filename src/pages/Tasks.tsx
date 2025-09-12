@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { axiosInstance, getTasks } from './api'
-import type { Task } from './types'
+import { getTasks, deleteTask, updateTask } from '../services/api'
+import type { Task } from '../types'
+import { toast } from 'sonner'
 
 export default function Tasks() {
   const [tasks, setTasks] = useState<Task[]>([])
@@ -12,6 +13,12 @@ export default function Tasks() {
   useEffect(() => {
     fetchTasks()
   }, [])
+
+  async function markAsDone(task: Task) {
+    await updateTask(task.id, { status: 'done' })
+    toast.success(`Tâche "${task.title}" marquée comme terminée.`)
+    fetchTasks()
+  }
 
   return (
     <div>
@@ -49,7 +56,14 @@ export default function Tasks() {
             </div>
             <div className="flex gap-2">
               {!isDone && (
-                <button className="bg-green-500 text-white px-3 py-1 rounded">Terminer</button>
+                <button
+                  className="bg-green-500 text-white px-3 py-1 rounded"
+                  onClick={() => {
+                    markAsDone(task)
+                  }}
+                >
+                  Terminer
+                </button>
               )}
               <NavLink
                 className="bg-yellow-500 text-white px-3 py-1 rounded"
@@ -61,7 +75,7 @@ export default function Tasks() {
                 className="bg-red-500 text-white px-3 py-1 rounded"
                 onClick={async () => {
                   try {
-                    await axiosInstance.delete(`/tasks/${task.id}`)
+                    await deleteTask(task.id)
                     fetchTasks()
                   } catch (e) {
                     console.error(e)

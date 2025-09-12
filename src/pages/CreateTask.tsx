@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { createTask } from './api'
+import { createTask } from '../services/api'
 import { toast } from 'sonner'
 
 export default function CreateTask() {

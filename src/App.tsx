@@ -8,11 +8,12 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import CreateTask from './pages/CreateTask'
 import EditTask from './pages/EditTask'
-import { TOKEN_KEY } from './pages/constants'
 import type { PropsWithChildren } from 'react'
+import { useAuth } from './context/AuthContext'
 
 function PrivateRoute({ children }: PropsWithChildren<object>) {
-  return localStorage.getItem(TOKEN_KEY) ? children : <Navigate to="/login" />
+  const { token } = useAuth()
+  return token ? children : <Navigate to="/login" />
 }
 
 function App() {
