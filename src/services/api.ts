@@ -6,19 +6,22 @@ export const axiosInstance = axios.create({
   baseURL: 'http://localhost:3000',
 })
 // Set the AUTH token for any request
-axiosInstance.interceptors.request.use(
-  function (config) {
-    const token = localStorage.getItem(TOKEN_KEY)
-    if (token) config.headers.Authorization = `Bearer ${token}`
-    return config
-  },
+axiosInstance.interceptors.request.use(function (config) {
+  const token = localStorage.getItem(TOKEN_KEY)
+  if (token) config.headers.Authorization = `Bearer ${token}`
+  return config
+})
+axiosInstance.interceptors.response.use(
+  (response) => response,
   function (error) {
     if (error.response && error.response.status === 401) {
       localStorage.removeItem(TOKEN_KEY)
+      window.location.href = '/login'
     }
     return Promise.reject(error)
   },
 )
+
 export async function getTasks() {
   const tasksResult = await axiosInstance.get<Task[]>('/tasks')
   return tasksResult.data
